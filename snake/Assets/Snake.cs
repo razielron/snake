@@ -10,9 +10,9 @@ public class Snake : MonoBehaviour
     public PointCounter pointsCounter; // user points counter
     public Transform segmentPrefab;  // Prefab for snake segments
     public Vector2Int direction = Vector2Int.right;  // Initial direction
-    public float speed = 1f;  // Base speed
-    public float speedMultiplier = 1f;  // Speed multiplier
-    public float maxSpeed = 5f;  // Maximum speed limit
+    public float speed = 5f;  // Base speed
+    public float speedMultiplier = 0.5f;  // Speed multiplier
+    public float maxSpeed = 20f;  // Maximum speed multiplier limit
     public int initialSize = 4;  // Initial snake size
     public bool moveThroughWalls = false;  // Can the snake move through walls?
     public int nomOfFoodEaten = 0;
@@ -65,8 +65,8 @@ public class Snake : MonoBehaviour
         // Move the head in the current direction
         MoveHead();
 
-        // Schedule the next update based on the speed and speedMultiplier
-        nextUpdate = Time.time + (1f / (speed * speedMultiplier));
+        // Schedule the next update based on the speed
+        nextUpdate = Time.time + (1f / speed);
     }
 
     // Add a new segment to the snake and increase speed
@@ -77,8 +77,10 @@ public class Snake : MonoBehaviour
         segments.Add(segment);
 
         // Increase speed multiplier and clamp it to the maximum speed
-        speedMultiplier += 0.1f;
-        speedMultiplier = Mathf.Min(speedMultiplier, maxSpeed / speed);
+        speed += speedMultiplier;
+        Debug.Log("speed: " + speed.ToString());
+        speed = Mathf.Min(speed, maxSpeed);
+        Debug.Log("speed: " + speed.ToString());
     }
 
     // Reset the snake to its initial state
@@ -87,6 +89,9 @@ public class Snake : MonoBehaviour
         // Initialize direction and position
         direction = Vector2Int.right;
         transform.position = Vector3.zero;
+        speed = 5f;
+        maxSpeed = 25f;
+        speedMultiplier = 0.5f;
 
         // Destroy all segments except the head
         DestroySegments();
