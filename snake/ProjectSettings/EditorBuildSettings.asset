@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/snake/Snake.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/ScoreBoard/ScoreBoard.unity
+    guid: 7630484dfe06b4540afcd29a9fa49893
   m_configObjects: {}

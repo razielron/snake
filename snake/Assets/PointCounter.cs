@@ -5,18 +5,27 @@ using UnityEngine;
 public class PointCounter : MonoBehaviour
 {
     [SerializeField]
-    PointHUD pointHud;
+    private PointHUD pointHud;
+    public bool GameContinues { get; set; } = true;
+    public double Factor { get; set; } = 1;
+    public double Points
+    {
+        get
+        {
+            return pointHud.Points;
+        }
+    }
     
-    private void Start()
+    public void Start()
     {
         StartCoroutine(CountPoints());
     }
 
     private IEnumerator CountPoints()
     {
-        while (true)
+        while (GameContinues)
         {
-            pointHud.Points += 5;
+            pointHud.Points += Factor;
             yield return new WaitForSeconds(1);
         }
     }

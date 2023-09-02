@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class Snake : MonoBehaviour
 {
     // Public variables for customization in the Unity Editor
+    [SerializeField]
+    public PointCounter pointsCounter; // user points counter
     public Transform segmentPrefab;  // Prefab for snake segments
     public Vector2Int direction = Vector2Int.right;  // Initial direction
     public float speed = 1f;  // Base speed
@@ -12,6 +15,7 @@ public class Snake : MonoBehaviour
     public float maxSpeed = 5f;  // Maximum speed limit
     public int initialSize = 4;  // Initial snake size
     public bool moveThroughWalls = false;  // Can the snake move through walls?
+    public int nomOfFoodEaten = 0;
 
     // Private variables for internal state
     private List<Transform> segments = new List<Transform>();  // List of snake segments
@@ -22,6 +26,7 @@ public class Snake : MonoBehaviour
     private void Start()
     {
         ResetState();
+        pointsCounter.Start();
     }
 
     // Handle user input for direction
@@ -104,11 +109,16 @@ public class Snake : MonoBehaviour
         if (other.gameObject.CompareTag("Food"))
         {
             Grow();
+            nomOfFoodEaten++;
+            pointsCounter.Factor += 2;
         }
         // Reset when colliding with an obstacle
         else if (other.gameObject.CompareTag("Obstacle"))
         {
             ResetState();
+            pointsCounter.GameContinues = false;
+            PlayerPrefs.SetString("LastScore", pointsCounter.Points.ToString());
+            SceneManager.LoadSceneAsync(0);
         }
         // Handle wall collision based on the moveThroughWalls setting
         else if (other.gameObject.CompareTag("Wall"))
@@ -120,6 +130,9 @@ public class Snake : MonoBehaviour
             else
             {
                 ResetState();
+                pointsCounter.GameContinues = false;
+                PlayerPrefs.SetString("LastScore", pointsCounter.Points.ToString());
+                SceneManager.LoadSceneAsync(0);
             }
         }
     }

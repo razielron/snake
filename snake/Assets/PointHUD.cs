@@ -7,14 +7,14 @@ public class PointHUD : MonoBehaviour
 {
     [SerializeField]
     Text pointText;
-    private int points = 0;
+    private double points = 0;
     
     private void Awake()
     {
         UpdateHUD();
     }
 
-    public int Points
+    public double Points
     {
         get
         {
